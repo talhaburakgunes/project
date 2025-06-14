@@ -9,7 +9,7 @@
 
 # Project Name
 *Proje Adı*
-Ağ Güvenliği Analizi
+*Ağ Güvenliği Analizi*
 A brief, engaging description of your project.  
 *Projenizin kısa ve ilgi çekici bir açıklaması.*
 
