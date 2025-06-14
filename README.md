@@ -1,8 +1,8 @@
 <div align="center">
-  <img src="https://img.shields.io/github/languages/count/keyvanarasteh/Project?style=flat-square&color=blueviolet" alt="Language Count">
-  <img src="https://img.shields.io/github/languages/top/keyvanarasteh/Project?style=flat-square&color=1e90ff" alt="Top Language">
-  <img src="https://img.shields.io/github/last-commit/keyvanarasteh/Project?style=flat-square&color=ff69b4" alt="Last Commit">
-  <img src="https://img.shields.io/github/license/keyvanarasteh/Project?style=flat-square&color=yellow" alt="License">
+  <img src="https://img.shields.io/github/languages/count/talhaburakgunes/project?style=flat-square&color=blueviolet" alt="Language Count">
+  <img src="https://img.shields.io/github/languages/top/talhaburakgunes/project?style=flat-square&color=1e90ff" alt="Top Language">
+  <img src="https://img.shields.io/github/last-commit/talhaburakgunes/project?style=flat-square&color=ff69b4" alt="Last Commit">
+  <img src="https://img.shields.io/github/license/talhaburakgunes/project?style=flat-square&color=yellow" alt="License">
   <img src="https://img.shields.io/badge/Status-Active-green?style=flat-square" alt="Status">
   <img src="https://img.shields.io/badge/Contributions-Welcome-brightgreen?style=flat-square" alt="Contributions">
 </div>
@@ -10,6 +10,7 @@
 # Project Name
 *Proje Adı:Ağ Güvenliği Analizi*
 
+*A brief and interesting description of the project: This project aims to detect security vulnerabilities and improve network security by analyzing network traffic. It is developed with Python.*
 *Projenin kısa ve ilgi çekici bir açıklama: Bu proje, ağ trafiğini analiz ederek güvenlik açıklarını tespit etmeyi ve ağ güvenliğini artırmayı amaçlar. Python ile geliştirilmektedir.*
 
 ---
@@ -123,9 +124,8 @@ Licensed under the [MIT License](LICENSE.md).
 ## Acknowledgements / *Teşekkürler* (Optional)
 
 Thanks to:  
-- Awesome Library: For enabling X.  
-- Inspiration Source.  
-- Special thanks to...  
+- Talha Burak Güneş (2320191066@stu.istinye.edu.tr) 
+- Istinye University
 
 *Teşekkürler: Harika kütüphaneler ve ilham kaynakları için.*
 
@@ -133,10 +133,10 @@ Thanks to:
 
 ## Contact / *İletişim* (Optional)
 
-Project Maintainer: [Your Name/Org Name] - [your.email@example.com]  
+Project Maintainer: [Talha Burak Gunes / Istinye University] - [2320191066@stu.istinye.edu.tr]  
 Found a bug? Open an issue.  
 
-*Proje Sorumlusu: [Adınız/Kuruluş Adınız] - [e-posta.adresiniz@ornek.com]. Hata bulursanız bir sorun bildirin.*
+*Proje Sorumlusu: [Talha Burak Gunes / Istinye University] - [2320191066@stu.istinye.edu.tr]. Hata bulursanız bir sorun bildirin.*
 
 ---
 
