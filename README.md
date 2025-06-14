@@ -8,21 +8,20 @@
 </div>
 
 # Project Name
-*Proje Adı*
-*Ağ Güvenliği Analizi*
-A brief, engaging description of your project.  
-*Projenizin kısa ve ilgi çekici bir açıklaması.*
+*Proje Adı:Ağ Güvenliği Analizi*
+
+*Projenin kısa ve ilgi çekici bir açıklama: Bu proje, ağ trafiğini analiz ederek güvenlik açıklarını tespit etmeyi ve ağ güvenliğini artırmayı amaçlar. Python ile geliştirilmektedir.*
 
 ---
 
 ## Features / *Özellikler*
 
 - **Feature 1:** Description of the feature.  
-  *Özellik 1: Özelliğin açıklaması.*
+  *Özellik 1: Ağ trafiğini gerçek zamanlı olarak izleme.*
 - **Feature 2:** Another cool thing it does.  
-  *Özellik 2: Yaptığı başka bir harika şey.*
+  *Özellik 2: Yaygın güvenlik açıklarını (örneğin, SQL enjeksiyonu) tespit etme.*
 - **Feature 3:** One more for good measure.  
-  *Özellik 3: Ve bir tane daha.*
+  *Özellik 3: Raporlama ve loglama ile analiz sonuçlarını kaydetme.*
 - Add more as they develop.  
   *Geliştikçe daha fazla ekleyin.*
 
