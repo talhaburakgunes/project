@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ağ Güvenliği Analiz Raporu - Geliştirici: Talha</title>
+    <!-- Tailwind CSS ve Chart.js CDN'leri -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Kodları Buraya Gömüldü -->
+    <style>
+        /* Genel Sayfa Stilleri */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7FAFC; /* Açık Gri Arka Plan */
+            color: #2D3748; /* Koyu Gri Metin */
+        }
+
+        /* Header Stilleri */
+        .header-accent {
+            color: #2b6cb0; /* Mavi Tonu */
+        }
+
+        /* Kart Stilleri */
+        .card {
+            background-color: white;
+            border-radius: 0.75rem; /* Daha yuvarlak köşeler */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+            padding: 1.5rem;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* İstatistik Kartları Stilleri */
+        .stat-number {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700; /* font-bold */
+            color: #2b6cb0; /* Mavi Tonu */
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #4A5568; /* Orta Gri */
+            margin-top: 0.5rem;
+        }
+
+        /* Başlık Stilleri */
+        h1, h2, h3 {
+            color: #1A202C; /* Çok Koyu Gri */
+        }
+
+        h2 {
+            border-bottom: 2px solid #CBD5E0; /* Açık Gri Çizgi */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Grafik Konteyner Stilleri */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Tablo Stilleri */
+        table thead th {
+            font-weight: 600;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #F7FAFC; /* Açık Gri (çizgili görünüm için) */
+        }
+
+        table tbody tr:hover {
+            background-color: #EDF2F7; /* Hover rengi */
+        }
+
+        table td, table th {
+            padding: 0.75rem 1.5rem;
+            white-space: nowrap; /* Satırların kaydırılmasını önle */
+        }
+
+        /* Özel Seviye Renklendirmesi */
+        .severity-1 {
+            color: #C53030; /* Kırmızı */
+            font-weight: 700;
+        }
+        .severity-2 {
+            color: #DD6B20; /* Turuncu */
+            font-weight: 600;
+        }
+        .severity-3 {
+            color: #D69E2E; /* Sarı */
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header Alanı -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-3xl font-bold header-accent text-center">Ağ Güvenliği Analiz Raporu</h1>
+            <p class="text-center text-lg text-slate-600">Geliştirici: Talha</p>
+        </div>
+    </header>
+
+    <!-- Ana İçerik Alanı -->
+    <main class="container mx-auto px-6 py-8">
+
+        <!-- Özet İstatistik Kartları -->
+        <section id="summary-stats" class="mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div class="card">
+                    <p class="stat-number" id="total-packets-stat">Yükleniyor...</p>
+                    <p class="stat-label">Toplam İncelenen Paket</p>
+                </div>
+                <div class="card">
+                    <p class="stat-number" id="total-alerts-stat">Yükleniyor...</p>
+                    <p class="stat-label">Tespit Edilen Toplam Uyarı</p>
+                </div>
+                <div class="card">
+                    <p class="stat-number" id="high-risk-ips-stat">Yükleniyor...</p>
+                    <p class="stat-label">Yüksek Riskli IP Sayısı</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grafiklerin Olduğu Bölüm -->
+        <section id="charts" class="mb-12">
+             <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <div class="card lg:col-span-2">
+                    <h3 class="text-xl font-semibold mb-4 text-center">Protokol Dağılımı</h3>
+                    <div class="chart-container h-[350px]">
+                        <canvas id="protocolChart"></canvas>
+                    </div>
+                </div>
+                <div class="card lg:col-span-3">
+                    <h3 class="text-xl font-semibold mb-4 text-center">Uyarıların Ciddiyet Seviyesine Göre Dağılımı</h3>
+                     <div class="chart-container h-[350px]">
+                        <canvas id="severityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tabloların Olduğu Bölüm -->
+        <section id="details" class="mb-12">
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                <!-- En Yüksek Riskli IP Adresleri Tablosu -->
+                <div class="card">
+                    <h2 class="text-2xl font-semibold mb-4">En Yüksek Riskli IP Adresleri</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-100">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">IP Adresi</th>
+                                    <th scope="col" class="px-6 py-3">Risk Skoru</th>
+                                </tr>
+                            </thead>
+                            <tbody id="risk-table-body">
+                                <!-- JS ile dinamik olarak doldurulacak -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Suricata Uyarıları Tablosu -->
+                <div class="card">
+                    <h2 class="text-2xl font-semibold mb-4">Son Güvenlik Uyarıları (Suricata)</h2>
+                    <div class="overflow-x-auto max-h-96">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-slate-700 uppercase bg-slate-100 sticky top-0">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">Zaman Damgası</th>
+                                    <th scope="col" class="px-6 py-3">Tehdit İmzası</th>
+                                    <th scope="col" class="px-6 py-3">Kaynak IP</th>
+                                    <th scope="col" class="px-6 py-3">Hedef IP</th>
+                                    <th scope="col" class="px-6 py-3">Seviye</th>
+                                </tr>
+                            </thead>
+                            <tbody id="alerts-table-body">
+                                <!-- JS ile dinamik olarak doldurulacak -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Alanı -->
+    <footer class="bg-slate-800 text-slate-300 text-center py-6">
+        <p>&copy; <span id="currentYear"></span> Ağ Güvenliği Analiz Aracı | Geliştirici: Talha</p>
+    </footer>
+    
+    <!-- JavaScript Kodları ve Veriler Buraya Gömüldü -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            // --- ÖRNEK VERİLER (Normalde JSON dosyalarından gelirdi) ---
+
+            const protocolData = {
+              "eth:ethertype:ip:tcp": 12500,
+              "eth:ethertype:ip:udp:dns": 8340,
+              "eth:ethertype:ip:icmp": 120,
+              "eth:ethertype:ip:udp": 2500,
+              "eth:ethertype:arp": 55
+            };
+
+            const alertsData = [
+              { "timestamp": "2025-06-14T20:32:00.789012", "src_ip": "10.0.0.5", "dest_ip": "192.168.1.105", "signature": "ET SCAN Nmap Scripting Engine User-Agent Detected", "severity": 1 },
+              { "timestamp": "2025-06-14T20:30:05.123456", "src_ip": "192.168.1.105", "dest_ip": "104.21.5.194", "signature": "ET POLICY Potentially Bad Traffic", "severity": 2 },
+              { "timestamp": "2025-06-14T20:31:15.654321", "src_ip": "192.168.1.110", "dest_ip": "1.1.1.1", "signature": "ET DNS Query for .to TLD", "severity": 3 },
+              { "timestamp": "2025-06-14T20:33:00.112233", "src_ip": "10.0.0.5", "dest_ip": "192.168.1.108", "signature": "ET SCAN Nmap OS-Fingerprint", "severity": 1 },
+              { "timestamp": "2025-06-14T20:34:05.445566", "src_ip": "192.168.1.120", "dest_ip": "208.67.222.222", "signature": "ET POLICY Outdated TLS Version", "severity": 2 }
+            ];
+
+            const riskData = {
+              "10.0.0.5": 50,
+              "192.168.1.105": 25,
+              "192.168.1.120": 25,
+              "192.168.1.110": 5
+            };
+
+
+            // --- RAPORLAMA FONKSİYONLARI ---
+
+            // Yükleme başarılı olduğunda fonksiyonları çağır
+            populateSummaryStats(alertsData, riskData); // Özet istatistikler
+            createProtocolChart(protocolData); // Protokol grafiği
+            createSeverityChart(alertsData); // Ciddiyet seviyesi grafiği
+            populateRiskTable(riskData); // Risk tablosu
+            populateAlertsTable(alertsData); // Uyarılar tablosu
+
+            function populateSummaryStats(alertsData, riskData) {
+                const totalPackets = Object.values(protocolData).reduce((sum, count) => sum + count, 0);
+                document.getElementById('total-packets-stat').textContent = totalPackets.toLocaleString('tr-TR');
+                
+                document.getElementById('total-alerts-stat').textContent = (alertsData.length || 0).toLocaleString('tr-TR');
+
+                const highRiskIPs = Object.values(riskData).filter(score => score >= 50).length;
+                document.getElementById('high-risk-ips-stat').textContent = (highRiskIPs || 0).toLocaleString('tr-TR');
+            }
+
+            function createProtocolChart(data) {
+                const ctx = document.getElementById('protocolChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{
+                            label: 'Paket Sayısı',
+                            data: Object.values(data),
+                            backgroundColor: ['#2B6CB0', '#4299E1', '#63B3ED', '#90CDF4', '#BEE3F8'],
+                            borderColor: '#FFFFFF',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { position: 'right' } }
+                    }
+                });
+            }
+
+            function createSeverityChart(data) {
+                const ctx = document.getElementById('severityChart').getContext('2d');
+                const severityCounts = { 'Yüksek (1)': 0, 'Orta (2)': 0, 'Düşük (3)': 0 };
+                
+                data.forEach(alert => {
+                    if (alert.severity === 1) severityCounts['Yüksek (1)']++;
+                    else if (alert.severity === 2) severityCounts['Orta (2)']++;
+                    else if (alert.severity === 3) severityCounts['Düşük (3)']++;
+                });
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(severityCounts),
+                        datasets: [{
+                            label: 'Uyarı Sayısı',
+                            data: Object.values(severityCounts),
+                            backgroundColor: ['#C53030', '#DD6B20', '#D69E2E'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+
+            function populateRiskTable(data) {
+                const tableBody = document.getElementById('risk-table-body');
+                tableBody.innerHTML = ''; 
+                const top10 = Object.entries(data).slice(0, 10);
+                
+                top10.forEach(([ip, score]) => {
+                    tableBody.innerHTML += `<tr>
+                        <td class="px-6 py-3 font-mono">${ip}</td>
+                        <td class="px-6 py-3 font-bold">${score}</td>
+                    </tr>`;
+                });
+            }
+
+            function populateAlertsTable(data) {
+                const tableBody = document.getElementById('alerts-table-body');
+                tableBody.innerHTML = '';
+                const latest20 = data.slice(-20).reverse();
+
+                latest20.forEach(alert => {
+                    tableBody.innerHTML += `<tr>
+                        <td class="px-6 py-3 font-mono text-xs">${new Date(alert.timestamp).toLocaleString('tr-TR')}</td>
+                        <td class="px-6 py-3 text-sm">${alert.signature}</td>
+                        <td class="px-6 py-3 font-mono">${alert.src_ip}</td>
+                        <td class="px-6 py-3 font-mono">${alert.dest_ip}</td>
+                        <td class="px-6 py-3 severity-${alert.severity}">${alert.severity}</td>
+                    </tr>`;
+                });
+            }
+
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        });
+    </script>
+
+</body>
+</html>
